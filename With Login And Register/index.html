@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>With Login And Register</title>
+</head>
+<body>
+
+<header>
+    <h2 class="Logo">Logo</h2>
+    <nav class="navMenu">
+        <a href="#">Меню</a>
+        <a href="#">О нас</a>
+        <a href="#">Контакты</a>
+        <a href="#">Профиль</a>
+        <button class="btnLogin-popup">Войти</button>
+    </nav>
+</header>
+
+<div class="wrapper">
+    <span class="icon-close">
+        <box-icon name='x'></box-icon>
+    </span>
+    <div class="form-box login">
+        <h2>Войти</h2>
+        <form action="#">
+            <div class="input-box">
+                <span class="icon">
+                    <box-icon name='envelope' type='solid' ></box-icon>
+                </span>
+                <input type="email" required>
+                <label>Email</label>
+            </div>
+            <div class="input-box">
+                <span class="icon">
+                   <box-icon type='solid' name='key'></box-icon>
+                </span>
+                <input type="password" required>
+                <label>Password</label>
+            </div>
+
+            <div class="remember-forgot">
+                <label><input type="checkbox">Запомнить меня</label>
+                <a href="#">Забыли пароль?</a>
+            </div>
+            <button type="submit" class="btn">Войти</button>
+            <div class="login-register">
+                <p>Нет аккаунта?<a href="#" class="register-link">Зарегистрироваться</a></p>
+            </div>
+        </form>
+    </div>
+
+    <div class="form-box register">
+        <h2>Регистрация</h2>
+        <form action="#">
+            <div class="input-box">
+                <span class="icon">
+                    <box-icon name='user' ></box-icon>
+                </span>
+                <input type="text" required>
+                <label>UserName</label>
+            </div>
+            <div class="input-box">
+                <span class="icon">
+                    <box-icon name='envelope' type='solid' ></box-icon>
+                </span>
+                <input type="email" required>
+                <label>Email</label>
+            </div>
+            <div class="input-box">
+                <span class="icon">
+                   <box-icon type='solid' name='key'></box-icon>
+                </span>
+                <input type="password" required>
+                <label>Password</label>
+            </div>
+
+            <div class="remember-forgot">
+                <label><input type="checkbox">Я согласен с положениями</label>
+                
+            </div>
+            <button type="submit" class="btn">Регистрация</button>
+            <div class="login-register">
+                <p>У вас уже есть аккаунт?<a href="#" class="login-link">Войти</a></p>
+            </div>
+        </form>
+    </div>
+</div>
+
+ 
+
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
