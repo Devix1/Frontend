@@ -21,7 +21,6 @@ const formattedDate = today.toLocaleDateString('ru-RU', {
 });
 
 dateElement.textContent = formattedDate;
-loadData(); // Загружаем данные при старте
 updateStockDisplay(); // Обновляем отображение количества товара
 
 // Функции для модальных окон
@@ -86,7 +85,6 @@ function saveSale() {
         alert("Товаров на складе нет!");
     }
 
-    saveData();
     closeModal('sale');
 }
 
@@ -99,7 +97,6 @@ function deleteSale(button) {
     stockCount += 1; // Увеличиваем количество товара на 1
     updateStockDisplay();
     li.parentElement.removeChild(li);
-    saveData();
 }
 
 function addExpenseForm() {
@@ -135,7 +132,6 @@ function saveExpense() {
     document.getElementById("modal-extra-expense-item").value = "";
     document.getElementById("modal-extra-expense-price").value = "";
 
-    saveData();
     closeModal('extra');
 }
 
@@ -146,7 +142,6 @@ function deleteExpense(button) {
     totalExpenses -= price;
     expenseTotalElement.textContent = `${totalExpenses.toFixed(2)} ₽`;
     li.parentElement.removeChild(li);
-    saveData();
 }
 
 function saveClient() {
@@ -164,7 +159,6 @@ function saveClient() {
         document.getElementById("modal-client-name").value = "";
         closeModal('client');
     }
-    saveData();
 }
 
 function deleteClient(button) {
@@ -172,55 +166,17 @@ function deleteClient(button) {
     li.parentElement.removeChild(li);
     activeClients -= 1;
     activeClientsElement.textContent = activeClients;
-    saveData();
 }
 
 function checkUserName() {
     const savedName = localStorage.getItem('userName');
     const savedStock = localStorage.getItem('stockCount');
-    const savedSalesIncome = localStorage.getItem('totalSalesIncome');
-    const savedExpenses = localStorage.getItem('totalExpenses');
-    const savedActiveClients = localStorage.getItem('activeClients');
-    const savedSales = JSON.parse(localStorage.getItem('salesList') || '[]');
-    const savedExpensesList = JSON.parse(localStorage.getItem('expenseList') || '[]');
-    const savedClients = JSON.parse(localStorage.getItem('clientList') || '[]');
-
     if (!savedName) {
         document.getElementById("nameModal").style.display = "block";
     } else {
         userNameElement.textContent = savedName;
         stockCount = parseInt(savedStock) || 0;
-        totalSalesIncome = parseFloat(savedSalesIncome) || 0;
-        totalExpenses = parseFloat(savedExpenses) || 0;
-        activeClients = parseInt(savedActiveClients) || 0;
-
-        salesIncomeElement.textContent = `${totalSalesIncome.toFixed(2)} ₽`;
-        expenseTotalElement.textContent = `${totalExpenses.toFixed(2)} ₽`;
-        activeClientsElement.textContent = activeClients;
         updateStockDisplay();
-
-        // Восстановление списков
-        salesList.innerHTML = '';
-        savedSales.forEach(item => {
-            const li = document.createElement("li");
-            li.innerHTML = `${item.text} <button class="delete-btn" onclick="deleteSale(this)">Удалить</button>`;
-            salesList.appendChild(li);
-        });
-
-        expenseList.innerHTML = '';
-        savedExpensesList.forEach(item => {
-            const li = document.createElement("li");
-            li.innerHTML = `${item.text} <button class="delete-btn" onclick="deleteExpense(this)">Удалить</button>`;
-            expenseList.appendChild(li);
-        });
-
-        clientList.innerHTML = '';
-        savedClients.forEach(item => {
-            const li = document.createElement("li");
-            li.innerHTML = `${item.text} <button class="delete-btn" onclick="deleteClient(this)">Удалить</button>`;
-            clientList.appendChild(li);
-        });
-
         dashboard.style.display = "block";
     }
 }
@@ -233,7 +189,6 @@ function saveUserName() {
         document.getElementById("nameModal").style.display = "none";
         dashboard.style.display = "block";
     }
-    saveData();
 }
 
 function openEditNameModal() {
@@ -249,7 +204,6 @@ function saveEditedName() {
         userNameElement.textContent = newName;
         document.getElementById("editNameModal").style.display = "none";
     }
-    saveData();
 }
 
 function openManageStockModal() {
@@ -263,78 +217,9 @@ function saveStockChanges() {
     localStorage.setItem('stockCount', newStock);
     stockCount = newStock; // Обновляем глобальную переменную
     updateStockDisplay();
-    saveData();
     document.getElementById("manageStockModal").style.display = "none";
 }
 
 function updateStockDisplay() {
     stockCountElement.textContent = `${stockCount} шт.`;
-}
-
-function saveData() {
-    localStorage.setItem('userName', userNameElement.textContent);
-    localStorage.setItem('stockCount', stockCount);
-    localStorage.setItem('totalSalesIncome', totalSalesIncome);
-    localStorage.setItem('totalExpenses', totalExpenses);
-    localStorage.setItem('activeClients', activeClients);
-
-    const salesData = Array.from(salesList.children).map(li => ({
-        text: li.textContent.replace('Удалить', '').trim()
-    }));
-    const expenseData = Array.from(expenseList.children).map(li => ({
-        text: li.textContent.replace('Удалить', '').trim()
-    }));
-    const clientData = Array.from(clientList.children).map(li => ({
-        text: li.textContent.replace('Удалить', '').trim()
-    }));
-
-    localStorage.setItem('salesList', JSON.stringify(salesData));
-    localStorage.setItem('expenseList', JSON.stringify(expenseData));
-    localStorage.setItem('clientList', JSON.stringify(clientData));
-}
-
-function loadData() {
-    const savedName = localStorage.getItem('userName');
-    const savedStock = localStorage.getItem('stockCount');
-    const savedSalesIncome = localStorage.getItem('totalSalesIncome');
-    const savedExpenses = localStorage.getItem('totalExpenses');
-    const savedActiveClients = localStorage.getItem('activeClients');
-    const savedSales = JSON.parse(localStorage.getItem('salesList') || '[]');
-    const savedExpensesList = JSON.parse(localStorage.getItem('expenseList') || '[]');
-    const savedClients = JSON.parse(localStorage.getItem('clientList') || '[]');
-
-    if (savedName) {
-        userNameElement.textContent = savedName;
-        stockCount = parseInt(savedStock) || 0;
-        totalSalesIncome = parseFloat(savedSalesIncome) || 0;
-        totalExpenses = parseFloat(savedExpenses) || 0;
-        activeClients = parseInt(savedActiveClients) || 0;
-
-        salesIncomeElement.textContent = `${totalSalesIncome.toFixed(2)} ₽`;
-        expenseTotalElement.textContent = `${totalExpenses.toFixed(2)} ₽`;
-        activeClientsElement.textContent = activeClients;
-        updateStockDisplay();
-
-        // Восстановление списков
-        salesList.innerHTML = '';
-        savedSales.forEach(item => {
-            const li = document.createElement("li");
-            li.innerHTML = `${item.text} <button class="delete-btn" onclick="deleteSale(this)">Удалить</button>`;
-            salesList.appendChild(li);
-        });
-
-        expenseList.innerHTML = '';
-        savedExpensesList.forEach(item => {
-            const li = document.createElement("li");
-            li.innerHTML = `${item.text} <button class="delete-btn" onclick="deleteExpense(this)">Удалить</button>`;
-            expenseList.appendChild(li);
-        });
-
-        clientList.innerHTML = '';
-        savedClients.forEach(item => {
-            const li = document.createElement("li");
-            li.innerHTML = `${item.text} <button class="delete-btn" onclick="deleteClient(this)">Удалить</button>`;
-            clientList.appendChild(li);
-        });
-    }
 }
