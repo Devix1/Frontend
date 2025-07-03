@@ -80,10 +80,11 @@ function saveSale() {
         stockCount -= 1;
         updateStockDisplay();
 
-        const salesList = document.getElementById('salesList');
         const newSale = document.createElement("li");
         newSale.innerHTML = `ДАТА: ${date}, ТОВАР: ${product}, ЦЕНА: ${priceText} ₽, КЛИЕНТ: ${client} <button class="delete-btn" onclick="deleteSale(this)">Удалить</button>`;
         salesList.insertBefore(newSale, salesList.firstChild);
+        newSale.style.opacity = '0'; // Начинаем с невидимости для анимации
+        setTimeout(() => newSale.style.opacity = '1', 10); // Плавное появление
 
         document.getElementById("modal-sale-date").value = formattedDate;
         document.getElementById("modal-sale-product").value = "";
@@ -139,10 +140,11 @@ function saveExpense() {
     totalExpenses += price;
     expenseTotalElement.textContent = `${totalExpenses.toFixed(2)} ₽`;
 
-    const expenseList = document.getElementById("expenseList");
     const newExpense = document.createElement("li");
     newExpense.innerHTML = `ДАТА: ${date}, ПОКУПКА: ${item}, ЦЕНА: ${priceText} ₽ <button class="delete-btn" onclick="deleteExpense(this)">Удалить</button>`;
     expenseList.insertBefore(newExpense, expenseList.firstChild);
+    newExpense.style.opacity = '0'; // Начинаем с невидимости
+    setTimeout(() => newExpense.style.opacity = '1', 10); // Плавное появление
 
     document.getElementById("modal-extra-expense-date").value = formattedDate;
     document.getElementById("modal-extra-expense-item").value = "";
@@ -172,10 +174,11 @@ function saveClient() {
     activeClients += 1;
     activeClientsElement.textContent = activeClients;
 
-    const clientList = document.getElementById('clientList');
     const newClient = document.createElement("li");
     newClient.innerHTML = `ФИО: ${clientName}, НОМЕР: +${clientCall} <button class="delete-btn" onclick="deleteClient(this)">Удалить</button>`;
     clientList.insertBefore(newClient, clientList.firstChild);
+    newClient.style.opacity = '0'; // Начинаем с невидимости
+    setTimeout(() => newClient.style.opacity = '1', 10); // Плавное появление
 
     document.getElementById("modal-client-name").value = "";
     closeModal('client');

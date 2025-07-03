@@ -94,7 +94,7 @@ header h1 {
 }
 
 .vertical-list {
-    list-style: none; /* Убираем маркеры списка */
+    list-style: none;
     padding: 0;
     margin: 0;
 }
@@ -110,13 +110,31 @@ header h1 {
     align-items: center;
     margin-bottom: 5px;
     position: relative;
-    list-style-type: none; /* Дополнительная гарантия убирания маркеров */
+    list-style-type: none;
+    animation: fadeIn 0.3s ease-in-out; /* Анимация появления */
+    transition: all 0.2s ease; /* Плавное изменение стилей */
+}
+
+.vertical-list li:hover {
+    background: #2e2e2e; /* Легкое затемнение при наведении */
+    transform: translateY(-2px); /* Легкое поднятие при наведении */
 }
 
 .vertical-list li + li {
     border-top: 1px solid #444;
     margin-top: 5px;
     padding-top: 10px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .delete-btn {
@@ -127,11 +145,12 @@ header h1 {
     border-radius: 4px;
     cursor: pointer;
     font-size: 10px;
-    transition: background 0.3s;
+    transition: background 0.3s, transform 0.2s;
 }
 
 .delete-btn:hover {
     background-color: #da190b;
+    transform: scale(1.1); /* Увеличение кнопки при наведении */
 }
 
 .btn {
@@ -142,7 +161,7 @@ header h1 {
     border-radius: 8px;
     cursor: pointer;
     font-weight: bold;
-    transition: background 0.3s;
+    transition: background 0.3s, transform 0.2s;
     width: 100%;
     text-align: center;
     font-size: 14px;
@@ -150,6 +169,7 @@ header h1 {
 
 .btn:hover {
     background-color: #ff9a4c;
+    transform: translateY(-2px); /* Легкое поднятие при наведении */
 }
 
 .edit-btn {
@@ -161,12 +181,13 @@ header h1 {
     cursor: pointer;
     font-size: 10px;
     margin-left: 5px;
-    transition: background 0.3s;
+    transition: background 0.3s, transform 0.2s;
     height: 25px;
 }
 
 .edit-btn:hover {
     background-color: #ff9a4c;
+    transform: translateY(-2px);
 }
 
 .stock-btn {
@@ -178,12 +199,13 @@ header h1 {
     cursor: pointer;
     font-size: 10px;
     margin-left: 5px;
-    transition: background 0.3s;
+    transition: background 0.3s, transform 0.2s;
     height: 25px;
 }
 
 .stock-btn:hover {
     background-color: #45a049;
+    transform: translateY(-2px);
 }
 
 .Sale, .Expense, .User {
@@ -269,10 +291,12 @@ header h1 {
     margin-right: 5px;
     flex: 1;
     font-size: 14px;
+    transition: background 0.3s, transform 0.2s;
 }
 
 .modal-buttons button:hover {
     background-color: #ff9a4c;
+    transform: translateY(-2px);
 }
 
 /* Медиа-запросы для адаптации */
@@ -333,7 +357,8 @@ header h1 {
     .vertical-list li {
         font-size: 10px;
         padding: 5px;
-        list-style-type: none; /* Убираем маркеры для мелких экранов */
+        list-style-type: none;
+        animation: fadeIn 0.3s ease-in-out;
     }
 
     .delete-btn {
@@ -429,7 +454,8 @@ header h1 {
     .vertical-list li {
         font-size: 12px;
         padding: 8px;
-        list-style-type: none; /* Убираем маркеры */
+        list-style-type: none;
+        animation: fadeIn 0.3s ease-in-out;
     }
 
     .delete-btn {
@@ -522,7 +548,8 @@ header h1 {
     .vertical-list li {
         font-size: 13px;
         padding: 9px;
-        list-style-type: none; /* Убираем маркеры */
+        list-style-type: none;
+        animation: fadeIn 0.3s ease-in-out;
     }
 
     .delete-btn {
@@ -615,7 +642,8 @@ header h1 {
     .vertical-list li {
         font-size: 14px;
         padding: 10px;
-        list-style-type: none; /* Убираем маркеры */
+        list-style-type: none;
+        animation: fadeIn 0.3s ease-in-out;
     }
 
     .delete-btn {
@@ -708,7 +736,8 @@ header h1 {
     .vertical-list li {
         font-size: 16px;
         padding: 12px;
-        list-style-type: none; /* Убираем маркеры */
+        list-style-type: none;
+        animation: fadeIn 0.3s ease-in-out;
     }
 
     .delete-btn {
