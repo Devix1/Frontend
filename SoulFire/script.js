@@ -12,7 +12,7 @@ const clientList = document.getElementById('clientList');
 let totalSalesIncome = 0;
 let totalExpenses = 0;
 let activeClients = 0;
-let stockCount = 0; // Глобальная переменная для отслеживания количества товара
+let stockCount = 0;
 
 const formattedDate = today.toLocaleDateString('ru-RU', {
   day: '2-digit',
@@ -21,7 +21,7 @@ const formattedDate = today.toLocaleDateString('ru-RU', {
 });
 
 dateElement.textContent = formattedDate;
-updateStockDisplay(); // Обновляем отображение количества товара
+updateStockDisplay();
 
 // Функции для модальных окон
 function openModal(type) {
@@ -58,23 +58,31 @@ function closeModal(type) {
 }
 
 function saveSale() {
-    const date = document.getElementById("modal-sale-date").value;
-    const product = document.getElementById("modal-sale-product").value;
-    const priceText = document.getElementById("modal-sale-price").value;
-    const client = document.getElementById("modal-sale-client").value;
+    const date = document.getElementById("modal-sale-date").value.trim();
+    const product = document.getElementById("modal-sale-product").value.trim();
+    const priceText = document.getElementById("modal-sale-price").value.trim();
+    const client = document.getElementById("modal-sale-client").value.trim();
 
-    let price = parseFloat(priceText.replace('Р', '').replace(',', '.'));
-    if (isNaN(price)) price = 0;
+    if (!date || !product || !priceText || !client) {
+        alert("Все поля должны быть заполнены!");
+        return;
+    }
 
-    if (stockCount > 0) { // Проверяем, есть ли товар на складе
+    let price = parseFloat(priceText);
+    if (isNaN(price) || price <= 0) {
+        alert("Введите корректную цену больше 0!");
+        return;
+    }
+
+    if (stockCount > 0) {
         totalSalesIncome += price;
         salesIncomeElement.textContent = `${totalSalesIncome.toFixed(2)} ₽`;
-        stockCount -= 1; // Уменьшаем количество товара на 1
+        stockCount -= 1;
         updateStockDisplay();
 
         const salesList = document.getElementById('salesList');
         const newSale = document.createElement("li");
-        newSale.innerHTML = `ДАТА: ${date}, ТОВАР: ${product}, ЦЕНА: ${priceText}, КЛИЕНТ: ${client} <button class="delete-btn" onclick="deleteSale(this)">Удалить</button>`;
+        newSale.innerHTML = `ДАТА: ${date}, ТОВАР: ${product}, ЦЕНА: ${priceText} ₽, КЛИЕНТ: ${client} <button class="delete-btn" onclick="deleteSale(this)">Удалить</button>`;
         salesList.insertBefore(newSale, salesList.firstChild);
 
         document.getElementById("modal-sale-date").value = formattedDate;
@@ -91,18 +99,18 @@ function saveSale() {
 function deleteSale(button) {
     const li = button.parentElement;
     const priceText = li.textContent.match(/ЦЕНА: (\d+(?:\.\d+)?)/)[1];
-    const price = parseFloat(priceText.replace('Р', '').replace(',', '.'));
+    const price = parseFloat(priceText);
     totalSalesIncome -= price;
     salesIncomeElement.textContent = `${totalSalesIncome.toFixed(2)} ₽`;
-    stockCount += 1; // Увеличиваем количество товара на 1
+    stockCount += 1;
     updateStockDisplay();
     li.parentElement.removeChild(li);
 }
 
 function addExpenseForm() {
-    const date = document.getElementById("modal-expense-date").value;
-    const item = document.getElementById("modal-expense-item").value;
-    const priceText = document.getElementById("modal-expense-price").value;
+    const date = document.getElementById("modal-expense-date").value.trim();
+    const item = document.getElementById("modal-expense-item").value.trim();
+    const priceText = document.getElementById("modal-expense-price").value.trim();
 
     document.getElementById("modal-extra-expense-date").value = date;
     document.getElementById("modal-extra-expense-item").value = item;
@@ -113,19 +121,27 @@ function addExpenseForm() {
 }
 
 function saveExpense() {
-    const date = document.getElementById("modal-extra-expense-date").value;
-    const item = document.getElementById("modal-extra-expense-item").value;
-    const priceText = document.getElementById("modal-extra-expense-price").value;
+    const date = document.getElementById("modal-extra-expense-date").value.trim();
+    const item = document.getElementById("modal-extra-expense-item").value.trim();
+    const priceText = document.getElementById("modal-extra-expense-price").value.trim();
 
-    let price = parseFloat(priceText.replace('Р', '').replace(',', '.'));
-    if (isNaN(price)) price = 0;
+    if (!date || !item || !priceText) {
+        alert("Все поля должны быть заполнены!");
+        return;
+    }
+
+    let price = parseFloat(priceText);
+    if (isNaN(price) || price <= 0) {
+        alert("Введите корректную цену больше 0!");
+        return;
+    }
 
     totalExpenses += price;
     expenseTotalElement.textContent = `${totalExpenses.toFixed(2)} ₽`;
 
     const expenseList = document.getElementById("expenseList");
     const newExpense = document.createElement("li");
-    newExpense.innerHTML = `ДАТА: ${date}, ПОКУПКА: ${item}, ЦЕНА: ${priceText} <button class="delete-btn" onclick="deleteExpense(this)">Удалить</button>`;
+    newExpense.innerHTML = `ДАТА: ${date}, ПОКУПКА: ${item}, ЦЕНА: ${priceText} ₽ <button class="delete-btn" onclick="deleteExpense(this)">Удалить</button>`;
     expenseList.insertBefore(newExpense, expenseList.firstChild);
 
     document.getElementById("modal-extra-expense-date").value = formattedDate;
@@ -138,7 +154,7 @@ function saveExpense() {
 function deleteExpense(button) {
     const li = button.parentElement;
     const priceText = li.textContent.match(/ЦЕНА: (\d+(?:\.\d+)?)/)[1];
-    const price = parseFloat(priceText.replace('Р', '').replace(',', '.'));
+    const price = parseFloat(priceText);
     totalExpenses -= price;
     expenseTotalElement.textContent = `${totalExpenses.toFixed(2)} ₽`;
     li.parentElement.removeChild(li);
@@ -147,18 +163,22 @@ function deleteExpense(button) {
 function saveClient() {
     const clientName = document.getElementById("modal-client-name").value.trim();
     const clientCall = document.getElementById("modal-client-numcall").value.trim();
-    if (clientName !== "") {
-        activeClients += 1;
-        activeClientsElement.textContent = activeClients;
 
-        const clientList = document.getElementById('clientList');
-        const newClient = document.createElement("li");
-        newClient.innerHTML = `ФИО: ${clientName}, НОМЕР: +${clientCall} <button class="delete-btn" onclick="deleteClient(this)">Удалить</button>`;
-        clientList.insertBefore(newClient, clientList.firstChild);
-
-        document.getElementById("modal-client-name").value = "";
-        closeModal('client');
+    if (!clientName || !clientCall) {
+        alert("Все поля должны быть заполнены!");
+        return;
     }
+
+    activeClients += 1;
+    activeClientsElement.textContent = activeClients;
+
+    const clientList = document.getElementById('clientList');
+    const newClient = document.createElement("li");
+    newClient.innerHTML = `ФИО: ${clientName}, НОМЕР: +${clientCall} <button class="delete-btn" onclick="deleteClient(this)">Удалить</button>`;
+    clientList.insertBefore(newClient, clientList.firstChild);
+
+    document.getElementById("modal-client-name").value = "";
+    closeModal('client');
 }
 
 function deleteClient(button) {
@@ -169,53 +189,55 @@ function deleteClient(button) {
 }
 
 function checkUserName() {
-    const savedName = localStorage.getItem('userName');
-    const savedStock = localStorage.getItem('stockCount');
-    if (!savedName) {
+    if (!document.getElementById("nameModal").style.display || document.getElementById("nameModal").style.display === "none") {
         document.getElementById("nameModal").style.display = "block";
     } else {
-        userNameElement.textContent = savedName;
-        stockCount = parseInt(savedStock) || 0;
-        updateStockDisplay();
-        dashboard.style.display = "block";
+        const savedName = "";
+        if (!savedName) {
+            document.getElementById("nameModal").style.display = "block";
+        } else {
+            userNameElement.textContent = savedName;
+            dashboard.style.display = "block";
+        }
     }
 }
 
 function saveUserName() {
     const name = document.getElementById("inputUserName").value.trim();
-    if (name) {
-        localStorage.setItem('userName', name);
-        userNameElement.textContent = name;
-        document.getElementById("nameModal").style.display = "none";
-        dashboard.style.display = "block";
+    if (!name) {
+        alert("Введите имя!");
+        return;
     }
+    userNameElement.textContent = name;
+    document.getElementById("nameModal").style.display = "none";
+    dashboard.style.display = "block";
 }
 
 function openEditNameModal() {
-    const currentName = localStorage.getItem('userName') || '';
+    const currentName = userNameElement.textContent || '';
     document.getElementById("editInputUserName").value = currentName;
     document.getElementById("editNameModal").style.display = "block";
 }
 
 function saveEditedName() {
     const newName = document.getElementById("editInputUserName").value.trim();
-    if (newName) {
-        localStorage.setItem('userName', newName);
-        userNameElement.textContent = newName;
-        document.getElementById("editNameModal").style.display = "none";
+    if (!newName) {
+        alert("Введите имя!");
+        return;
     }
+    userNameElement.textContent = newName;
+    document.getElementById("editNameModal").style.display = "none";
 }
 
 function openManageStockModal() {
-    const currentStock = localStorage.getItem('stockCount') || 0;
+    const currentStock = stockCount || 0;
     document.getElementById("manageStockInput").value = currentStock;
     document.getElementById("manageStockModal").style.display = "block";
 }
 
 function saveStockChanges() {
     const newStock = parseInt(document.getElementById("manageStockInput").value) || 0;
-    localStorage.setItem('stockCount', newStock);
-    stockCount = newStock; // Обновляем глобальную переменную
+    stockCount = newStock;
     updateStockDisplay();
     document.getElementById("manageStockModal").style.display = "none";
 }
